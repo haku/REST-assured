@@ -22,10 +22,19 @@ module RestAssured
       body = request.body.read #without temp variable ':body = > body' is always nil. mistery
       env  = request.env.except('rack.input', 'rack.errors', 'rack.logger')
 
-      d.requests.create!(:rack_env => env.to_json, :body => body, :params => request.params.to_json)
+      response_params = {":::time" => Time.now.to_i.to_s}
+      response_body = d.content.nil? ? "" : d.content.gsub(":::time",response_params)
+
+      r = d.requests.create!(
+        :rack_env => env.to_json,
+        :body => body,
+        :params => request.params.to_json,
+        :response_body => response_body,
+        :response_params => response_params.to_json
+      )
 
       app.headers d.response_headers
-      app.body d.content
+      app.body response_body
       app.status d.status
     end
 
