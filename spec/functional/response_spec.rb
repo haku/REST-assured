@@ -56,7 +56,8 @@ module RestAssured
         requests = double
         Models::Double.stub_chain('where.first').and_return(double(:requests => requests).as_null_object)
 
-        requests.should_receive(:create!).with(:rack_env => 'env', :body => 'body', :params => 'params')
+        requests.should_receive(:create!).with(:rack_env => 'env', :body => 'body', :params => 'params',
+          :response_body => anything(), :response_params => anything()) # TODO make more specific.
 
         Response.perform(rest_assured_app)
       end
