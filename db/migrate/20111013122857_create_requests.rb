@@ -5,8 +5,6 @@ class CreateRequests < ActiveRecord::Migration
       t.text :params
       t.text :body
       t.text :rack_env
-      t.text :response_body
-      t.text :response_params
       t.datetime :created_at
     end
   end
