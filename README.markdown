@@ -226,6 +226,10 @@ Tests require there to be mysql database `rest_assured_test` accessible by `root
     $ bundle exec rspec spec
     $ bundle exec cucumber
 
+### Useful test references
+
+* http://rubydoc.info/gems/rspec-mocks/frames
+
 ## Author
 
 [Artem Avetisyan](https://github.com/artemave)
