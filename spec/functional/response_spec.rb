@@ -87,8 +87,8 @@ module RestAssured
     end
 
     it "redirects if double not hit but there is redirect that matches request" do
-    #r = Models::Redirect.create :to => 'http://exmple.com/api', :pattern => '.*'
-    #
+      #r = Models::Redirect.create :to => 'http://exmple.com/api', :pattern => '.*'
+      #
       fullpath = '/some/other/path'
       request.stub(:fullpath).and_return(fullpath)
       Models::Redirect.stub(:find_redirect_url_for).with(fullpath).and_return('new_url')
