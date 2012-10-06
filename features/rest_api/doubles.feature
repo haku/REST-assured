@@ -57,7 +57,12 @@ Feature: use doubles via api
     When I delete all doubles
     Then there should be no doubles
 
-  Scenario: request count incremented
+  Scenario: content not touched if template_type not set
+    Given there is double with "/api/something" as fullpath and "content:::request_count" as response content
+    When I "GET" "/api/something"
+    Then I should get "content:::request_count" in response content
+
+  Scenario: request count incremented and inserted into content
     Given there is double with "/api/something" as fullpath, "content:::request_count" as response content and "custom" as template_type
     When I "GET" "/api/something"
     Then I should get "content1" in response content
