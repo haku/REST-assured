@@ -61,7 +61,17 @@ module RestAssured
 
         Response.perform(rest_assured_app)
       end
-    
+
+      it 'increments request number' do
+        requests = double
+        Models::Double.stub_chain('where.first').and_return(double(:requests => requests).as_null_object)
+
+        requests.should_receive(:create!).twice # TODO be more specific.
+
+        Response.perform(rest_assured_app)
+        Response.perform(rest_assured_app)
+      end
+
       it "returns double when redirect matches double" do
         fullpath = '/some/other/path'
         request.stub(:fullpath).and_return(fullpath)
@@ -77,8 +87,8 @@ module RestAssured
     end
 
     it "redirects if double not hit but there is redirect that matches request" do
-      #r = Models::Redirect.create :to => 'http://exmple.com/api', :pattern => '.*'
-      #
+    #r = Models::Redirect.create :to => 'http://exmple.com/api', :pattern => '.*'
+    #
       fullpath = '/some/other/path'
       request.stub(:fullpath).and_return(fullpath)
       Models::Redirect.stub(:find_redirect_url_for).with(fullpath).and_return('new_url')

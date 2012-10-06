@@ -22,10 +22,17 @@ module RestAssured
       body = request.body.read #without temp variable ':body = > body' is always nil. mistery
       env  = request.env.except('rack.input', 'rack.errors', 'rack.logger')
 
-      response_params = {":::time" => Time.now.to_i.to_s}
-      response_body = d.content.nil? ? "" : d.content.gsub(":::time",response_params)
+      d.increment!(:request_count)
 
-      r = d.requests.create!(
+      if d.template_type == "custom" # TODO use erubis
+        response_params = {"request_count" => d.request_count}
+        response_body = d.content.nil? ? "" : d.content.gsub(":::request_count", d.request_count.to_s)
+      else
+        response_params = {}
+        response_body = d.content
+      end
+
+      d.requests.create!(
         :rack_env => env.to_json,
         :body => body,
         :params => request.params.to_json,

@@ -35,6 +35,10 @@ Given /^there is double with "([^"]*)" as fullpath, "([^"]*)" as response conten
   RestAssured::Models::Double.create(:fullpath => fullpath, :content => content, :verb => verb, :status => status)
 end
 
+Given /^there is double with "([^"]*)" as fullpath, "([^"]*)" as response content and "([^"]*)" as template_type$/ do |fullpath, content, template_type|
+  RestAssured::Models::Double.create(:fullpath => fullpath, :content => content, :template_type => template_type)
+end
+
 When /^I request "([^"]*)"$/ do |fullpath|
   get fullpath
 end

@@ -3,7 +3,7 @@ require 'net/http'
 module RestAssured
   module Models
     class Double < ActiveRecord::Base
-      attr_accessible :fullpath, :content, :description, :verb, :status, :response_headers
+      attr_accessible :fullpath, :content, :description, :verb, :status, :response_headers, :request_count, :template_type
 
       serialize :response_headers, Hash
 
@@ -17,6 +17,8 @@ module RestAssured
       after_initialize :set_status
       after_initialize :set_verb
       after_initialize :set_response_headers
+      after_initialize :set_request_count
+      after_initialize :set_template_type
 
       before_save :toggle_active
       after_destroy :set_active
@@ -43,6 +45,14 @@ module RestAssured
 
         def set_status
           self.status = 200 unless status.present?
+        end
+
+        def set_request_count
+          self.request_count ||= 0;
+        end
+
+        def set_template_type
+          self.template_type ||= nil;
         end
 
         def set_active
