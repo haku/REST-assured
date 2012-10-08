@@ -82,3 +82,11 @@ Feature: use doubles via api
     Then I should get "content2" in response content
     When I "GET" "/api/something"
     Then I should get "content3" in response content
+
+  @templates
+  Scenario: request can trigger creation of other doubles
+    Given there is double with "/api/something" as fullpath, "<% double_dao.create(:fullpath => '/api/other', :content => 'other content') %>content" as response content and "erubis" as template_type
+    When I "GET" "/api/something"
+    Then I should get "content" in response content
+    When I "GET" "/api/other"
+    Then I should get "other content" in response content
