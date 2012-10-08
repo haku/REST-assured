@@ -57,14 +57,26 @@ Feature: use doubles via api
     When I delete all doubles
     Then there should be no doubles
 
+  @templates
   Scenario: content not touched if template_type not set
     Given there is double with "/api/something" as fullpath and "content:::request_count" as response content
     When I "GET" "/api/something"
     Then I should get "content:::request_count" in response content
 
-  Scenario: request count incremented and inserted into content
+  @templates
+  Scenario: request count incremented and inserted into content when using custom templates
     Given there is double with "/api/something" as fullpath, "content:::request_count" as response content and "custom" as template_type
     When I "GET" "/api/something"
+    Then I should get "content1" in response content
+    When I "GET" "/api/something"
+    Then I should get "content2" in response content
+    When I "GET" "/api/something"
+    Then I should get "content3" in response content
+
+  @templates
+  Scenario: request count incremented and inserted into content when using erubis templates
+    Given there is double with "/api/something" as fullpath, "content<%= double.request_count %>" as response content and "erubis" as template_type
+     When I "GET" "/api/something"
     Then I should get "content1" in response content
     When I "GET" "/api/something"
     Then I should get "content2" in response content

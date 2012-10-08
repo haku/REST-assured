@@ -1,3 +1,5 @@
+require 'erubis'
+
 module RestAssured
   class Response
 
@@ -24,9 +26,13 @@ module RestAssured
 
       d.increment!(:request_count)
 
-      if d.template_type == "custom" # TODO use erubis
+      if d.template_type == "custom"
         response_params = {"request_count" => d.request_count}
         response_body = d.content.nil? ? "" : d.content.gsub(":::request_count", d.request_count.to_s)
+      elsif d.template_type == "erubis"
+        response_params = {"request_count" => d.request_count}
+        scope_params = response_params.merge({:double => d, :request_body => body})
+        response_body = d.content.nil? ? "" : Erubis::Eruby.new(d.content).result(scope_params)
       else
         response_params = {}
         response_body = d.content
